@@ -1,13 +1,8 @@
 <?php
-require_once("includes/functions.php");
+require_once("includes/functions.inc.php");
 require_once("includes/db.inc.php");
 
 session_start();
-
-
-if (isset($outMessage)) {
-    echo $outMessage ;
-} 
 
 //Check if user has already logged in
 if (isset($_SESSION['user_id'])){
@@ -19,13 +14,14 @@ else {?>
 <!-- HTML login form -->    
     <form method="POST" ACTION="login.php">
 
-    user:<INPUT type="text" name="name"><br />
+    user:<INPUT type="text" name="username"><br />
     password:<INPUT type="password" name="password"><br />
 
     <input type="submit" value="SUBMIT">
 
     </form>
-  
+<p><a href="new_user.php">Register new user</a></p>  
+
 <?php    
 //If user submitted credentials, check them on the database
     if ((isset($_POST['username'])) && (isset($_POST['password']))   ) {
@@ -52,12 +48,12 @@ else {?>
                 $_SESSION['user_id'] = $found_user['id'];
                 $_SESSION['username'] = $found_user['username'];  
                 exit();
-              } else $outMessage = "Login Failed: Wrong Username or Password" ;
+              } else echo "Login Failed: Wrong Username or Password" ;
 
 
         } catch (PDOException $e){
             $error = $e->getMessage();
-            $outMessage = "Login Failed: $error";
+            echo "Login Failed: $error";
             error_log($error,0);
           }
 
